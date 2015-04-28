@@ -6,10 +6,10 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from .chain import chainable, make_chain
+from .chain import ReturnEarly, chainable, make_chain
 from .validators import (required, optional, nonempty, boolean, istype, gte,
                          match, url)
 from .helpers import OR
 
-__all__ = ['chainable', 'make_chain', 'required', 'optional', 'nonempty',
-           'boolean', 'istype', 'gte', 'match', 'url', 'OR']
+__all__ = ['ReturnEarly', 'chainable', 'make_chain', 'required', 'optional',
+           'nonempty', 'boolean', 'istype', 'gte', 'match', 'url', 'OR']
