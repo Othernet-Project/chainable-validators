@@ -3,7 +3,7 @@ Chainable Validators
 ====================
 
 This package contains a set of simple functions to facilitate creation of
-chainable validator methods for developing data validation schemas.
+chainable validator methods for developing data validation schemata.
 
 Although it provides a few validation function, it's main purpose is
 extensibility.
@@ -25,12 +25,12 @@ The basis of all validation are chainable validators (validation functions) and
 the validation chains which are created using ``make_chain()`` calls.
 
 The chainable validators are found in the ``validators.validators`` module. For
-convenicence, they can be imported directly from the ``validators`` package::
+convenience, they can be imported directly from the ``validators`` package::
 
     >>> from validators import required, istype, gte
 
 The chainable validators can be used stand-alone or as part of a chain. For
-standalone usage, simply pass the value to the validator. ::
+standalone usage, pass the value to the validator. ::
 
     >>> required(None)
     Traceback (most recent call last):
@@ -70,7 +70,7 @@ validators::
 The validators in the chain are invoked in order until the last one is called,
 or ``ValueError`` or ``validators.ReturnEarly`` is raised. When no exceptions
 are raised, the return value of the last chainable validator is returned. In
-case ReturnEarly is raised, it is not propagated to the chain's caller, but
+case ``ReturnEarly`` is raised, it is not propagated to the chain's caller, but
 instead the original value is returned.
 
 List of built-in validators
@@ -120,8 +120,7 @@ validator, use the ``validators.chain.chainable`` decorator. ::
     ...
     ValueError: does not start with foo
 
-To write a parametric validator, simply define the chainable validator in a
-closure::
+To write a parametric validator, define the chainable validator in a closure::
 
     >>> def my_parametric(start):
     ...     @chainable
