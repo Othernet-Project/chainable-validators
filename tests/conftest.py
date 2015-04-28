@@ -1,7 +1,7 @@
 import pytest
 import mock
 
-from validators.chainable import chainable
+from validators.chain import chainable
 
 
 @pytest.fixture

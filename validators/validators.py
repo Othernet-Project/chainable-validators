@@ -9,7 +9,7 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
 from .re_patterns import URL_RE
-from .chainable import chainable, ReturnEarly
+from .chain import chainable, ReturnEarly
 
 
 def optional(default=None):
