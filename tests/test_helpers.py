@@ -8,6 +8,11 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+
 import pytest
 
 import validators.helpers as mod
@@ -69,3 +74,79 @@ def test_not(chainable_func):
         rev(1)
     x.side_effect = ValueError
     assert rev(1) == 1
+
+
+def test_spec_validator(chainable_func):
+    """
+    Given a validation spec as dict that maps object keys/attributes to
+    validation chain, when calling spec_validator() with the dict, then it
+    returns a function that will validate an object against the spec.
+    """
+    x1, cx1 = chainable_func()
+    y1, cy1 = chainable_func()
+    x2, cx2 = chainable_func()
+    y2, cy2 = chainable_func()
+    spec = {
+        'foo': [cx1, cy1],
+        'bar': [cx2, cy2],
+    }
+    data = {'foo': 1, 'bar': 2}
+    fn = mod.spec_validator(spec)
+    fn(data)
+    x1.assert_called_once_with(1)
+    y1.assert_called_once_with(x1.return_value)
+    x2.assert_called_once_with(2)
+    y2.assert_called_once_with(x2.return_value)
+
+
+def test_spec_validator_custom_getter(chainable_func):
+    """
+    Given a validation spec and a custom getter, when calling spec_validator()
+    with the spec and getter, it is able to correctly pass the object
+    values to chains.
+    """
+    import operator
+
+    x1, cx1 = chainable_func()
+    y1, cy1 = chainable_func()
+    x2, cx2 = chainable_func()
+    y2, cy2 = chainable_func()
+    spec = {
+        'foo': [cx1, cy1],
+        'bar': [cx2, cy2],
+    }
+
+    obj = mock.Mock()
+    obj.foo = 1
+    obj.bar = 2
+
+    fn = mod.spec_validator(spec, key=operator.attrgetter)
+    fn(obj)
+    x1.assert_called_once_with(1)
+    y1.assert_called_once_with(x1.return_value)
+    x2.assert_called_once_with(2)
+    y2.assert_called_once_with(x2.return_value)
+
+
+def test_spec_validator_failure(chainable_func):
+    """
+    Given a vlidation spec and and object with invalid data, when calling
+    spec_validator() on the spec and then calling the returned validator on the
+    object, then it should return a dict that mapes failed keys to error
+    objects.
+    """
+    x1, cx1 = chainable_func()
+    y1, cy1 = chainable_func()
+    x2, cx2 = chainable_func()
+    y2, cy2 = chainable_func()
+    y2.side_effect = ValueError
+    spec = {
+        'foo': [cx1, cy1],
+        'bar': [cx2, cy2],
+    }
+    data = {'foo': 1, 'bar': 2}
+    fn = mod.spec_validator(spec)
+    ret = fn(data)
+    assert 'bar' in ret
+    assert 'foo' not in ret
+    assert isinstance(ret['bar'], ValueError)
