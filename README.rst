@@ -118,6 +118,42 @@ This chain will validate using ``foo`` first, then either ``bar`` or ``baz``
 (whichever passes), then ``fam``, reversing the results of ``fam`` (if it
 raises, then the validation will succeed and vice versa).
 
+Spec validator
+==============
+
+Another helper function, that is not mentioned in the previous section, is
+``spec_validator()`` factory function. It takes a spec, which is a dict mapping
+key/attribute names to chains and returns a validator function that validates
+objects.
+
+Let's take a look at an example, and then explain things as we go::
+
+    >>> import re
+    >>> from validator import *
+    >>> spec = {
+    ...     'foo': [required, istype(int)],
+    ...     'bar': [optional, match(re.compile(r'te.*')],
+    ...     'baz': [optional, boolean]
+    ... }
+    >>> validator = spec_validator(spec)
+
+The validator function returns a dict which maps keys to any ``ValueError``
+exceptions raised by the individual chains. If data is valid, the dict is
+empty.
+
+    >>> data = {'foo': 1, 'bar': 'test', 'baz': None}
+    >>> validator(data)
+    {}
+    >>> data['foo'] = None
+    >>> validator(data)
+    {'foo': ValueError('required value is missing')}
+
+
+The ``spec_validator()`` function takes an optional ``key`` argument, which you
+can use to define how values are retrieved from the object. This function must
+accept a spec key name and return a function that returns the value given an
+object. The default key function is ``operator.itemgetter``.
+
 Writing your own validators
 ===========================
 
