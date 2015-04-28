@@ -139,7 +139,7 @@ Let's take a look at an example, and then explain things as we go::
 
 The validator function returns a dict which maps keys to any ``ValueError``
 exceptions raised by the individual chains. If data is valid, the dict is
-empty.
+empty. ::
 
     >>> data = {'foo': 1, 'bar': 'test', 'baz': None}
     >>> validator(data)
