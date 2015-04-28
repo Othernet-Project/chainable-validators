@@ -9,7 +9,8 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 from .chain import ReturnEarly, chainable, make_chain
 from .validators import (required, optional, nonempty, boolean, istype, gte,
                          match, url)
-from .helpers import OR, NOT
+from .helpers import OR, NOT, spec_validator
 
 __all__ = ['ReturnEarly', 'chainable', 'make_chain', 'required', 'optional',
-           'nonempty', 'boolean', 'istype', 'gte', 'match', 'url', 'OR', 'NOT']
+           'nonempty', 'boolean', 'istype', 'gte', 'match', 'url', 'OR', 'NOT',
+           'spec_validator']
