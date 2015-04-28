@@ -27,3 +27,15 @@ def OR(*fns):
         if last:
             raise last
     return validator
+
+
+def NOT(fn):
+    """ Reverse the effect of a chainable validator function """
+    @chainable
+    def validator(v):
+        try:
+            fn(v)
+        except ValueError:
+            return v
+        raise ValueError('invalid')
+    return validator

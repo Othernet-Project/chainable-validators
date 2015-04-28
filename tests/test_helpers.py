@@ -56,3 +56,16 @@ def test_or_all_fail(chainable_func):
     fn = mod.OR(cx, cy)
     with pytest.raises(ValueError):
         fn(1)
+
+
+def test_not(chainable_func):
+    """
+    Given a chainable function, when NOT() is called with the function, then a
+    function is returned that reverses the effects.
+    """
+    x, cx = chainable_func()
+    rev = mod.NOT(cx)
+    with pytest.raises(ValueError):
+        rev(1)
+    x.side_effect = ValueError
+    assert rev(1) == 1
