@@ -100,6 +100,24 @@ it's a parametric validator.
   ``match()`` method)
 - ``url`` - rejects values that are not URLs
 
+Helper functions
+================
+
+There are a few helper functions that help you modify the behavior or one or
+more functions in the chain.
+
+- ``OR(*fns)`` - rejects value if and only if all of the functions passed to it
+  fail to validate, otherwise passes
+- ``NOT(fn)`` - reverses the behavior of ``fn``
+
+For example::
+
+    >>> my_chain = [foo, OR(bar, baz), NOT(fam)]
+
+This chain will validate using ``foo`` first, then either ``bar`` or ``baz``
+(whichever passes), then ``fam``, reversing the results of ``fam`` (if it
+raises, then the validation will succeed and vice versa).
+
 Writing your own validators
 ===========================
 
