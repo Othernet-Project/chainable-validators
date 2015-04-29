@@ -99,6 +99,8 @@ it's a parametric validator.
   (``regex`` object is a valid ``re.RegExp`` instance or object with a
   ``match()`` method)
 - ``url`` - rejects values that are not URLs
+- ``timestamp(fmt)`` - rejects values that cannot be converted to ``datetime``
+  using ``datetime.strptime()`` and given format string
 
 Helper functions
 ================
