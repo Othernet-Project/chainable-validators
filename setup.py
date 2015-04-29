@@ -41,7 +41,7 @@ class PyTest(TestCommand):
 
 setup(
     name='chainable-validators',
-    version='0.2',
+    version='0.3',
     author='Outernet Inc',
     author_email='apps@outernet.is',
     description=('Python data validation framework that uses chainable '
