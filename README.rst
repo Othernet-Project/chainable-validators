@@ -135,11 +135,30 @@ Let's take a look at an example, and then explain things as we go::
     ...     'bar': [optional, match(re.compile(r'te.*')],
     ...     'baz': [optional, boolean]
     ... }
+
+Each key in spec represents the key we expect to find in the object. The key
+could be a dictionary key, list/tuple index, or an object attribute. It could
+also be an arbitrary value based on which the value will be extracted.
+
+The way keys map to values is defined by a key function which can be passed
+using the ``key`` argument. This function must accept a spec key name and
+return a function that returns the value given an object. The default key
+function is ``operator.itemgetter``. For example, if we have an object that as
+attributes we want to validate, we could create the validator like so::
+
+    >>> import operator
+    >>> attr_validator = spec_validator(spec, key=operator.attrgetter)
+
+Each key maps to an iterable which represents the validator chain. Chains are
+applied to values matching the key.
+
+The ``spec_validator()`` function returns a validator function. ::
+
     >>> validator = spec_validator(spec)
 
-The validator function returns a dict which maps keys to any ``ValueError``
-exceptions raised by the individual chains. If data is valid, the dict is
-empty. ::
+When passed the object to be validated, the validator function returns a dict
+which maps keys to any ``ValueError`` exceptions raised by the individual
+chains. If data is valid, the dict is empty. ::
 
     >>> data = {'foo': 1, 'bar': 'test', 'baz': None}
     >>> validator(data)
@@ -148,11 +167,8 @@ empty. ::
     >>> validator(data)
     {'foo': ValueError('required value is missing')}
 
-
-The ``spec_validator()`` function takes an optional ``key`` argument, which you
-can use to define how values are retrieved from the object. This function must
-accept a spec key name and return a function that returns the value given an
-object. The default key function is ``operator.itemgetter``.
+Thanks to this behavior, you can test whether object is valid, by testing if
+the returned dict is empty.
 
 Writing your own validators
 ===========================
