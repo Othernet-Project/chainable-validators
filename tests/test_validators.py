@@ -318,3 +318,33 @@ def test_invalid_url():
     """
     with pytest.raises(ValueError):
         mod.url('this is an invalid URL')
+
+
+@pytest.mark.parametrize('x', [
+    ('2015-04-29', '%Y-%m-%d'),
+    ('2015-04-29 17:00:01', '%Y-%m-%d %H:%M:%S'),
+    fail(('2015-29-04', '%Y-%m-%d')),
+    fail(('2015-04-29', '%H:%M:%S')),
+])
+def test_timestamp(x):
+    """
+    Given a time- or datestamp and matching format in strptime() notation, when
+    timestamp() is called with the format string, then it returns a function
+    which returns the timestamp when called with it.
+    """
+    s, fmt = x
+    validator = mod.timestamp(fmt)
+    assert validator(s) == s
+
+
+@pytest.mark.parametrize('x', [
+    fail(('2015-04-29', '%Y-%m-%d')),
+    fail(('2015-04-29 17:00:01', '%Y-%m-%d %H:%M:%S')),
+    ('2015-29-04', '%Y-%m-%d'),
+    ('2015-04-29', '%H:%M:%S'),
+])
+def test_timestamp_reverse(x):
+    s, fmt = x
+    validator = mod.timestamp(fmt)
+    with pytest.raises(ValueError):
+        validator(s)

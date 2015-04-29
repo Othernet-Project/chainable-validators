@@ -8,6 +8,8 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
+import datetime
+
 from .re_patterns import URL_RE
 from .chain import chainable, ReturnEarly
 
@@ -89,3 +91,11 @@ def match(regex):
 
 def url(fn):
     return match(URL_RE)(fn)
+
+
+def timestamp(fmt):
+    @chainable
+    def validator(s):
+        datetime.datetime.strptime(s, fmt)
+        return s
+    return validator
