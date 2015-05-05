@@ -26,21 +26,24 @@ def optional(default=None):
 @chainable
 def required(s):
     if s is None:
-        raise ValueError('required value missing')
+        raise ValueError('value is required', 'required')
     return s
 
 
 @chainable
 def nonempty(s):
     if s in ['', [], {}]:
-        raise ValueError('empty sequence')
+        seqtype = type(s)
+        raise ValueError('value cannot be an empty {}'.format(seqtype),
+                         'nonempty')
     return s
 
 
 @chainable
 def boolean(v):
     if v not in [True, False]:
-        raise ValueError('not boolean')
+        raise ValueError('{} must be True or False'.format(v),
+                         'boolean')
     return v
 
 
@@ -48,7 +51,8 @@ def istype(t):
     @chainable
     def validator(v):
         if type(v) is not t:
-            raise ValueError('not {}'.format(t.__name__))
+            raise ValueError('value must be a {}'.format(t.__name__),
+                             'istype')
         return v
     return validator
 
@@ -57,7 +61,8 @@ def isin(collection):
     @chainable
     def validator(s):
         if s not in collection:
-            raise ValueError('not in collection')
+            raise ValueError('value must be present in {}'.format(collection),
+                             'isin')
         return s
     return validator
 
@@ -66,7 +71,8 @@ def gte(num):
     @chainable
     def validator(v):
         if not v >= num:
-            raise ValueError('value too small')
+            raise ValueError('value must be greater than {}'.format(num),
+                             'gte')
         return v
     return validator
 
@@ -75,7 +81,8 @@ def lte(num):
     @chainable
     def validator(v):
         if not v <= num:
-            raise ValueError('value too large')
+            raise ValueError('value must be less than {}'.format(num),
+                             'lte')
         return v
     return validator
 
@@ -84,18 +91,26 @@ def match(regex):
     @chainable
     def validator(s):
         if not regex.match(s):
-            raise ValueError('wrong format')
+            raise ValueError('value does not match the expected format',
+                             'match')
         return s
     return validator
 
 
 def url(fn):
-    return match(URL_RE)(fn)
+    try:
+        return match(URL_RE)(fn)
+    except ValueError:
+        raise ValueError('value must be a valid URL', 'url')
 
 
 def timestamp(fmt):
     @chainable
     def validator(s):
-        datetime.datetime.strptime(s, fmt)
+        try:
+            datetime.datetime.strptime(s, fmt)
+        except ValueError:
+            raise ValueError("{} does not match the format '{}'".format(
+                s, fmt), 'timestamp')
         return s
     return validator
