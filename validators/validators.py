@@ -61,7 +61,7 @@ def isin(collection):
     @chainable
     def validator(s):
         if s not in collection:
-            raise ValueError('value must be present in {}'.format(collection),
+            raise ValueError('value must be in {}'.format(collection),
                              'isin')
         return s
     return validator
