@@ -90,8 +90,13 @@ def lte(num):
 def match(regex):
     @chainable
     def validator(s):
-        if not regex.match(s):
-            raise ValueError('value does not match the expected format',
+        try:
+            if not regex.match(s):
+                raise ValueError('value does not match the expected format',
+                                 'match')
+        except TypeError:
+            raise ValueError('value of {} type cannot be tested for '
+                             'format'.format(type(s).__name__),
                              'match')
         return s
     return validator
