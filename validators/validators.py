@@ -47,6 +47,14 @@ def boolean(v):
     return v
 
 
+@chainable
+def deprecated(k):
+    raise ValueError('Key is deprecated, remove it or ignore this error',
+                     'deprecated')
+
+def test():
+    print('it worked')
+
 def istype(t):
     @chainable
     def validator(v):
