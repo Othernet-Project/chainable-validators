@@ -15,7 +15,6 @@ from .re_patterns import URL_RE
 from .chain import chainable, ReturnEarly
 
 RELPATH_RE = re.compile(r'^[^/]+(/[^/]+)*$')
-CONTENT_TYPES = ['html', 'video', 'audio', 'image', 'generic', 'app']
 
 
 def optional(default=None):
