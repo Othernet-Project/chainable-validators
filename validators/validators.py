@@ -62,8 +62,8 @@ def instanceof(t):
     @chainable
     def validator(v):
         if not isinstance(v, t):
-            raise ValueError('value must be a {}, was {}'.format(
-                t.__name__, type(v).__name__), 'istype')
+            raise ValueError('value must be an instance of {}, was {}'.format(
+                t.__name__, type(v).__name__), 'instanceof')
         return v
     return validator
 
