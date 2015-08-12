@@ -60,6 +60,16 @@ def deprecated(k):
     return k
 
 
+def isinstance(t):
+    @chainable
+    def validator(v):
+        if not isinstance(v, t):
+            raise ValueError('value must be a {}, was {}'.format(
+                t.__name__, type(v).__name__), 'istype')
+        return v
+    return validator
+
+
 def istype(t):
     @chainable
     def validator(v):
