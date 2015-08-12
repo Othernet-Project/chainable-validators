@@ -59,7 +59,7 @@ def deprecated(k):
     return k
 
 
-def isinstance(t):
+def instanceof(t):
     @chainable
     def validator(v):
         if not isinstance(v, t):
