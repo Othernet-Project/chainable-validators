@@ -156,7 +156,7 @@ def listof(item_validator):
     @chainable
     def validator(v):
         if not isinstance(v, list):
-            raise ValueError("Value must be a list.", 'min_length')
+            raise ValueError("Value must be a list.", 'listof')
         for item in v:
             item_validator(item)
         return v
