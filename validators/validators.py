@@ -145,8 +145,19 @@ def timestamp(fmt):
 def min_len(min=1):
     @chainable
     def validator(v):
-        if  v == None or len(v) < min:
+        if v == None or len(v) < min:
             raise ValueError("Key must be longer than {}, was {}".format(min,v),
                              'min_length')
+        return v
+    return validator
+
+
+def listof(item_validator):
+    @chainable
+    def validator(v):
+        if not isinstance(v, list):
+            raise ValueError("Value must be a list.", 'min_length')
+        for item in v:
+            item_validator(item)
         return v
     return validator

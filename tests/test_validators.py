@@ -348,3 +348,26 @@ def test_timestamp_reverse(x):
     validator = mod.timestamp(fmt)
     with pytest.raises(ValueError):
         validator(s)
+
+
+@pytest.mark.parametrize('x', [
+    ([1, 2], mod.istype(int)),
+    (["a", "bb"], mod.istype(str)),
+])
+def test_listof_valid(x):
+    (value, item_validator) = x
+    validator = mod.listof(item_validator)
+    assert validator(value) == value
+
+
+@pytest.mark.parametrize('x', [
+    (None, None),
+    ({}, None),
+    (1, None),
+    ("test", None)
+])
+def test_listof_invalid(x):
+    (value, item_validator) = x
+    validator = mod.listof(item_validator)
+    with pytest.raises(ValueError):
+        validator(value)
