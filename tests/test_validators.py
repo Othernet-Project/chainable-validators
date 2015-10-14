@@ -364,7 +364,8 @@ def test_listof_valid(x):
     (None, None),
     ({}, None),
     (1, None),
-    ("test", None)
+    ("test", None),
+    ([1, 2], mod.istype(str))
 ])
 def test_listof_invalid(x):
     (value, item_validator) = x
