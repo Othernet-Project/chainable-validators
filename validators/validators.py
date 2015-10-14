@@ -52,7 +52,7 @@ def boolean(v):
 
 @chainable
 def deprecated(k):
-    if k != None:
+    if k is None:
         raise ValueError('Key is deprecated, remove it or ignore this error',
                          'deprecated')
     return k
@@ -145,9 +145,9 @@ def timestamp(fmt):
 def min_len(min=1):
     @chainable
     def validator(v):
-        if v == None or len(v) < min:
-            raise ValueError("Key must be longer than {}, was {}".format(min,v),
-                             'min_length')
+        if v is None or len(v) < min:
+            message = "Key must be longer than {}, was {}".format(min, v)
+            raise ValueError(message, 'min_length')
         return v
     return validator
 
