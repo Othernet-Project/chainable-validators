@@ -2,6 +2,8 @@
 *.sw[op]
 /.ropeproject
 /.tox
+/.cache
 /MANIFEST
 /dist
+/build
 /*.egg-info
