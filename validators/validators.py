@@ -158,6 +158,12 @@ def listof(item_validator):
         if not isinstance(v, list):
             raise ValueError("Value must be a list.", 'listof')
         for item in v:
-            item_validator(item)
+            try:
+                item_validator(item)
+            except ValueError as exc:
+                (error, validator_type) = exc.args
+                message = ("List item validation failed with error: "
+                           "{0}".format(error))
+                raise ValueError(message, 'listof')
         return v
     return validator
