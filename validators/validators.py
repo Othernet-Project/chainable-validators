@@ -52,7 +52,7 @@ def boolean(v):
 
 @chainable
 def deprecated(k):
-    if k is None:
+    if k is not None:
         raise ValueError('Key is deprecated, remove it or ignore this error',
                          'deprecated')
     return k
